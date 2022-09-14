@@ -7,12 +7,12 @@
 #include <stdio.h>
 typedef struct s_clients {
     int     id;
-    char    msg[1024];
+    char    msg[2048];
 } t_clients;
-t_clients   clients[1024];
+t_clients   clients[2048];
 fd_set      readfds, writefds, active;
 int         fdMax = 0, idNext = 0;
-char        bufferRead[65536], bufferWrite[65536];
+char        bufferRead[120000], bufferWrite[120000];
 void    ftError(char *str) {
     if (str)
         write(2, str, strlen(str));
@@ -64,7 +64,7 @@ int main(int ac, char **av) {
                 break;
             }
             if (FD_ISSET(fdI, &readfds) && fdI != sockfd) {
-                int res = recv(fdI, bufferRead, 65536, 0);
+                int res = recv(fdI, bufferRead, 199999, 0);
                 if (res <= 0) {
                     sprintf(bufferWrite, "server: client %d just left\n", clients[fdI].id);
                     sendAll(fdI);
